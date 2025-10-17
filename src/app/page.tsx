@@ -5,11 +5,7 @@ import { useState } from 'react';
 
 export default function Chat() {
   const [input, setInput] = useState('');
-  const { messages, sendMessage } = useChat(
-    {
-      api: '/api/chat',
-    } as any
-  );
+  const { messages, sendMessage } = useChat();
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
       {messages.map(message => (
