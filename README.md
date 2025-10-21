@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI SQL Agent
 
-## Getting Started
+A Next.js chat application that uses the Vercel AI SDK and OpenAI to answer natural language questions by safely generating and executing SQL queries against a database.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* **Natural Language to SQL:** Ask "How many products did we sell?" and get a direct answer.
+* **AI Tool-Using:** The AI agent uses a `schema` tool to learn the database structure and a `db` tool to run `SELECT` queries.
+* **Safe by Design:** The system prompt restricts the AI to **read-only (`SELECT`) operations**.
+* **Streaming UI:** Responses and AI tool-call statuses stream back to the user in real-time.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
+* **Framework:** Next.js (App Router)
+* **AI:** Vercel AI SDK 3.0, OpenAI (`gpt-4o-mini`)
+* **Frontend:** React (`useChat` hook), Tailwind CSS
+* **Schema Validation:** Zod
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## How It Works
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1.  **Frontend:** The `useChat` hook sends the user's message to the `/api/chat` endpoint.
+2.  **Backend:** The API route uses `streamText` to give the AI a system prompt and access to two tools: `schema` (gets DB structure) and `db` (runs a query).
+3.  **AI Process:** The AI first calls `schema` to understand the tables, then calls `db` with a generated SQL query to get the data.
+4.  **Response:** The final natural language answer is streamed back to the frontend.
